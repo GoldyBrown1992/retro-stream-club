@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RETRO STREAM CLUB</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Press Start 2P', cursive;
+            background: #0a0a0a;
+            color: #fff;
+            overflow: hidden;
+            position: relative;
+            height: 100vh;
+        }
+        
+        /* Scanline effect for extra retro feel */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                transparent 50%,
+                rgba(0, 255, 255, 0.03) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 999;
+            animation: scanlines 8s linear infinite;
+        }
+        
+        @keyframes scanlines {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+        
+        /* Homepage styles */
+        .homepage {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #0a0a0a 100%);
+            transition: opacity 0.5s ease-out;
+        }
+        
+        .homepage.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .glitch-text {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 60px;
+            text-shadow: 
+                2px 2px 0 #ff00ff,
+                -2px -2px 0 #00ffff,
+                0 0 20px #ff00ff;
+            animation: glitch 2s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { text-shadow: 2px 2px 0 #ff00ff, -2px -2px 0 #00ffff, 0 0 20px #ff00ff; }
+            25% { text-shadow: -2px 2px 0 #00ffff, 2px -2px 0 #ff00ff, 0 0 30px #00ffff; }
+            50% { text-shadow: 2px -2px 0 #ff00ff, -2px 2px 0 #00ffff, 0 0 25px #ff00ff; }
+            75% { text-shadow: -2px -2px 0 #00ffff, 2px 2px 0 #ff00ff, 0 0 35px #00ffff; }
+        }
+        
+        .enter-button {
+            background: linear-gradient(145deg, #2a2a3e, #16161e);
+            border: 3px solid #00ffff;
+            color: #00ffff;
+            padding: 30px 80px;
+            font-size: 1.8rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.5),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+        
+        .enter-button:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 0 40px rgba(0, 255, 255, 0.8),
+                inset 0 0 30px rgba(0, 255, 255, 0.3);
+            background: linear-gradient(145deg, #3a3a4e, #26262e);
+        }
+        
+        .enter-button:active {
+            transform: scale(0.98);
+        }
+        
+        .enter-button::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(0, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .enter-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        /* Main app styles */
+        .main-app {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 100%);
+        }
+        
+        .main-app.active {
+            display: flex;
+        }
+        
+        /* Video section */
+        .video-section {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .stream-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .video-player {
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 16/9;
+            background: #000;
+            border: 3px solid #333;
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .video-placeholder {
+            color: #666;
+            font-size: 0.8rem;
+            text-align: center;
+            line-height: 1.5;
+        }
+        
+        .live-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #ff0000;
+            padding: 5px 15px;
+            font-size: 0.7rem;
+            animation: blink 1s infinite;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        /* Control section */
+        .control-section {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16161e 100%);
+            border-top: 2px solid #333;
+            box-shadow: 0 -10px 30px rgba(0, 255, 255, 0.2);
+        }
+        
+        .tab-bar {
+            display: flex;
+            background: #0a0a0a;
+            border-bottom: 2px solid #333;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            background: #16161e;
+            border: none;
+            color: #666;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .tab:not(:last-child) {
+            border-right: 1px solid #333;
+        }
+        
+        .tab.active {
+            background: #1a1a2e;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+        
+        .tab.active::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #00ffff;
+            box-shadow: 0 0 10px #00ffff;
+        }
+        
+        .tab:hover:not(.active) {
+            background: #1a1a2e;
+            color: #999;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 30px;
+            min-height: 250px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Action buttons */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .action-button {
+            aspect-ratio: 1;
+            background: linear-gradient(145deg, #2a2a3e, #16161e);
+            border: 2px solid #444;
+            border-radius: 15px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-button:hover {
+            transform: translateY(-5px) scale(1.05);
+            border-color: #00ffff;
+            box-shadow: 
+                0 10px 30px rgba(0, 255, 255, 0.4),
+                inset 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+        
+        .action-button.activated {
+            animation: activate 0.5s;
+        }
+        
+        @keyframes activate {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); box-shadow: 0 0 50px rgba(0, 255, 255, 0.8); }
+            100% { transform: scale(1); }
+        }
+        
+        .action-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+        
+        .action-label {
+            font-size: 0.6rem;
+            color: #999;
+            text-transform: uppercase;
+        }
+        
+        /* Knob control */
+        .knob-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .knob-wrapper {
+            position: relative;
+            width: 150px;
+            height: 150px;
+        }
+        
+        .knob {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #3a3a4e, #16161e);
+            border: 3px solid #444;
+            cursor: grab;
+            position: relative;
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.3),
+                inset 0 0 20px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.3s;
+        }
+        
+        .knob:active {
+            cursor: grabbing;
+        }
+        
+        .knob:hover {
+            border-color: #00ffff;
+        }
+        
+        .knob-indicator {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            width: 4px;
+            height: 30px;
+            background: #00ffff;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px #00ffff;
+            pointer-events: none;
+        }
+        
+        .knob-value {
+            font-size: 1.5rem;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+        }
+        
+        .knob-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        /* Tip content */
+        .tip-content {
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .tip-message {
+            color: #666;
+            font-size: 0.8rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+        
+        .coming-soon {
+            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1rem;
+            animation: gradient 3s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(180deg); }
+        }
+        
+        /* Action feedback */
+        .action-feedback {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid #00ffff;
+            padding: 20px 40px;
+            font-size: 1.2rem;
+            color: #00ffff;
+            text-shadow: 0 0 20px #00ffff;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+        
+        .action-feedback.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Homepage -->
+    <div class="homepage" id="homepage">
+        <h1 class="glitch-text">Secret<br>Stream<br>Club</h1>
+        <button class="enter-button" onclick="enterApp()">[ ENTER ]</button>
+    </div>
+    
+    <!-- Main App -->
+    <div class="main-app" id="mainApp">
+        <!-- Video Section -->
+        <div class="video-section">
+            <div class="stream-title">⚡ LIVE TRANSMISSION ⚡</div>
+            <div class="video-player">
+                <div class="video-placeholder">
+                    [ STREAM PLAYER ]<br>
+                    Video feed will appear here<br>
+                    Waiting for signal...
+                </div>
+                <div class="live-badge">● LIVE</div>
+            </div>
+        </div>
+        
+        <!-- Control Section -->
+        <div class="control-section">
+            <div class="tab-bar">
+                <button class="tab" onclick="switchTab('tip')">💰 TIP</button>
+                <button class="tab active" onclick="switchTab('actions')">⚡ ACTIONS</button>
+                <button class="tab" onclick="switchTab('speed')">🎮 SPEED</button>
+            </div>
+            
+            <!-- Tip Tab Content -->
+            <div class="tab-content" id="tipTab">
+                <div class="tip-content">
+                    <div class="tip-message">
+                        Support the stream<br>
+                        Send your energy
+                    </div>
+                    <div class="coming-soon">[ COMING SOON ]</div>
+                </div>
+            </div>
+            
+            <!-- Actions Tab Content -->
+            <div class="tab-content active" id="actionsTab">
+                <div class="actions-grid">
+                    <div class="action-button" onclick="triggerAction('Spray', this)">
+                        <span class="action-icon">💦</span>
+                        <span class="action-label">Spray</span>
+                    </div>
+                    <div class="action-button" onclick="triggerAction('Oil', this)">
+                        <span class="action-icon">🛢️</span>
+                        <span class="action-label">Oil</span>
+                    </div>
+                    <div class="action-button" onclick="triggerAction('Light', this)">
+                        <span class="action-icon">💡</span>
+                        <span class="action-label">Light</span>
+                    </div>
+                    <div class="action-button" onclick="triggerAction('Fire', this)">
+                        <span class="action-icon">🔥</span>
+                        <span class="action-label">Fire</span>
+                    </div>
+                    <div class="action-button" onclick="triggerAction('Ice', this)">
+                        <span class="action-icon">🧊</span>
+                        <span class="action-label">Ice</span>
+                    </div>
+                    <div class="action-button" onclick="triggerAction('Zap', this)">
+                        <span class="action-icon">⚡</span>
+                        <span class="action-label">Zap</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Speed Tab Content -->
+            <div class="tab-content" id="speedTab">
+                <div class="knob-container">
+                    <div class="knob-wrapper">
+                        <div class="knob" id="knob">
+                            <div class="knob-indicator"></div>
+                        </div>
+                    </div>
+                    <div class="knob-value" id="knobValue">0%</div>
+                    <div class="knob-label">INTENSITY CONTROL</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Action Feedback Overlay -->
+    <div class="action-feedback" id="actionFeedback"></div>
+    
+    <script>
+        // Enter app function
+        function enterApp() {
+            const homepage = document.getElementById('homepage');
+            const mainApp = document.getElementById('mainApp');
+            
+            // Add glitch effect before transition
+            homepage.style.animation = 'glitch 0.1s 5';
+            
+            setTimeout(() => {
+                homepage.classList.add('hidden');
+                setTimeout(() => {
+                    homepage.style.display = 'none';
+                    mainApp.classList.add('active');
+                }, 500);
+            }, 500);
+        }
+        
+        // Tab switching
+        function switchTab(tabName) {
+            // Update tab buttons
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update tab content
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            
+            const tabMap = {
+                'tip': 'tipTab',
+                'actions': 'actionsTab',
+                'speed': 'speedTab'
+            };
+            
+            document.getElementById(tabMap[tabName]).classList.add('active');
+        }
+        
+        // Trigger action
+        function triggerAction(actionName, button) {
+            // Visual feedback on button
+            button.classList.add('activated');
+            setTimeout(() => button.classList.remove('activated'), 500);
+            
+            // Show feedback overlay
+            const feedback = document.getElementById('actionFeedback');
+            feedback.textContent = `${actionName.toUpperCase()} ACTIVATED!`;
+            feedback.classList.add('show');
+            
+            setTimeout(() => {
+                feedback.classList.remove('show');
+            }, 1500);
+            
+            // Console log for debugging
+            console.log(`Action triggered: ${actionName}`);
+            
+            // Here you would send the action to your backend
+            // For now, it's just a visual effect
+        }
+        
+        // Knob control
+        let knobRotation = 0;
+        let isDragging = false;
+        let startAngle = 0;
+        let currentAngle = 0;
+        
+        const knob = document.getElementById('knob');
+        const knobValue = document.getElementById('knobValue');
+        
+        function updateKnob(angle) {
+            // Limit rotation between 0 and 270 degrees
+            angle = Math.max(0, Math.min(270, angle));
+            knobRotation = angle;
+            
+            // Update visual rotation
+            knob.style.transform = `rotate(${angle}deg)`;
+            
+            // Calculate percentage (0-270 degrees = 0-100%)
+            const percentage = Math.round((angle / 270) * 100);
+            knobValue.textContent = `${percentage}%`;
+            
+            // Add glow effect based on value
+            const glowIntensity = percentage / 100;
+            knob.style.boxShadow = `
+                0 0 ${30 + glowIntensity * 20}px rgba(0, 255, 255, ${0.3 + glowIntensity * 0.5}),
+                inset 0 0 20px rgba(0, 0, 0, 0.5)
+            `;
+            
+            // Console log for debugging
+            console.log(`Speed set to: ${percentage}%`);
+        }
+        
+        function getAngle(e) {
+            const rect = knob.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            const x = e.clientX - centerX;
+            const y = e.clientY - centerY;
+            
+            let angle = Math.atan2(y, x) * (180 / Math.PI) + 90;
+            if (angle < 0) angle += 360;
+            
+            return angle;
+        }
+        
+        knob.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startAngle = getAngle(e) - knobRotation;
+            knob.style.cursor = 'grabbing';
+            e.preventDefault();
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            
+            currentAngle = getAngle(e) - startAngle;
+            updateKnob(currentAngle);
+        });
+        
+        document.addEventListener('mouseup', () => {
+            if (isDragging) {
+                isDragging = false;
+                knob.style.cursor = 'grab';
+            }
+        });
+        
+        // Touch support for mobile
+        knob.addEventListener('touchstart', (e) => {
+            isDragging = true;
+            const touch = e.touches[0];
+            startAngle = getAngle(touch) - knobRotation;
+            e.preventDefault();
+        });
+        
+        document.addEventListener('touchmove', (e) => {
+            if (!isDragging) return;
+            
+            const touch = e.touches[0];
+            currentAngle = getAngle(touch) - startAngle;
+            updateKnob(currentAngle);
+        });
+        
+        document.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+        
+        // Add keyboard controls for accessibility
+        document.addEventListener('keydown', (e) => {
+            if (document.getElementById('speedTab').classList.contains('active')) {
+                if (e.key === 'ArrowUp' || e.key === 'ArrowRight') {
+                    updateKnob(Math.min(270, knobRotation + 10));
+                } else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') {
+                    updateKnob(Math.max(0, knobRotation - 10));
+                }
+            }
+        });
+        
+        // Initialize
+        console.log('Retro Stream Club initialized');
+        console.log('Ready for interactive streaming!');
+    </script>
+</body>
+</html>
