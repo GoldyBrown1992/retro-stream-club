@@ -2,47 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RETRO STREAM CLUB</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Stream Control</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap');
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
         
         body {
-            font-family: 'Press Start 2P', cursive;
-            background: #0a0a0a;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
             color: #fff;
-            overflow: hidden;
+            overflow-x: hidden;
+            min-height: 100vh;
             position: relative;
-            height: 100vh;
         }
         
-        /* Scanline effect for extra retro feel */
+        /* Subtle animated background */
         body::before {
             content: "";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                transparent 50%,
-                rgba(0, 255, 255, 0.03) 50%
-            );
-            background-size: 100% 4px;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            animation: pulse 15s ease-in-out infinite;
             pointer-events: none;
-            z-index: 999;
-            animation: scanlines 8s linear infinite;
         }
         
-        @keyframes scanlines {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(10px); }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+            50% { transform: scale(1.1) rotate(180deg); opacity: 0.3; }
         }
         
         /* Homepage styles */
@@ -52,78 +48,63 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: radial-gradient(circle at center, #1a1a2e 0%, #0a0a0a 100%);
-            transition: opacity 0.5s ease-out;
+            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
         
         .homepage.hidden {
             opacity: 0;
+            transform: scale(0.95);
             pointer-events: none;
         }
         
-        .glitch-text {
-            font-size: 2.5rem;
-            text-transform: uppercase;
-            text-align: center;
+        .logo-container {
             margin-bottom: 60px;
-            text-shadow: 
-                2px 2px 0 #ff00ff,
-                -2px -2px 0 #00ffff,
-                0 0 20px #ff00ff;
-            animation: glitch 2s infinite;
+            text-align: center;
         }
         
-        @keyframes glitch {
-            0%, 100% { text-shadow: 2px 2px 0 #ff00ff, -2px -2px 0 #00ffff, 0 0 20px #ff00ff; }
-            25% { text-shadow: -2px 2px 0 #00ffff, 2px -2px 0 #ff00ff, 0 0 30px #00ffff; }
-            50% { text-shadow: 2px -2px 0 #ff00ff, -2px 2px 0 #00ffff, 0 0 25px #ff00ff; }
-            75% { text-shadow: -2px -2px 0 #00ffff, 2px 2px 0 #ff00ff, 0 0 35px #00ffff; }
+        .logo-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+            margin-bottom: 10px;
+        }
+        
+        .logo-subtitle {
+            font-size: 1rem;
+            color: #666;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
         }
         
         .enter-button {
-            background: linear-gradient(145deg, #2a2a3e, #16161e);
-            border: 3px solid #00ffff;
-            color: #00ffff;
-            padding: 30px 80px;
-            font-size: 1.8rem;
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            border: none;
+            color: white;
+            padding: 18px 60px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            text-transform: uppercase;
+            border-radius: 100px;
             position: relative;
             overflow: hidden;
-            transition: all 0.3s;
-            box-shadow: 
-                0 0 20px rgba(0, 255, 255, 0.5),
-                inset 0 0 20px rgba(0, 255, 255, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 25px rgba(139, 92, 246, 0.25);
+            letter-spacing: 0.02em;
         }
         
         .enter-button:hover {
-            transform: scale(1.05);
-            box-shadow: 
-                0 0 40px rgba(0, 255, 255, 0.8),
-                inset 0 0 30px rgba(0, 255, 255, 0.3);
-            background: linear-gradient(145deg, #3a3a4e, #26262e);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 35px rgba(139, 92, 246, 0.4);
         }
         
         .enter-button:active {
-            transform: scale(0.98);
-        }
-        
-        .enter-button::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(0, 255, 255, 0.5);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-        
-        .enter-button:hover::before {
-            width: 300px;
-            height: 300px;
+            transform: translateY(0);
         }
         
         /* Main app styles */
@@ -131,11 +112,14 @@
             display: none;
             flex-direction: column;
             height: 100vh;
-            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a2e 100%);
+            background: #0a0a0a;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
         
         .main-app.active {
             display: flex;
+            opacity: 1;
         }
         
         /* Video section */
@@ -145,19 +129,46 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 0;
+            overflow: auto;
         }
         
-        .stream-title {
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: #ff00ff;
-            text-shadow: 0 0 10px #ff00ff;
-            animation: pulse 2s infinite;
+        .stream-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
         }
         
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 6px 16px;
+            border-radius: 100px;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: livePulse 2s infinite;
+        }
+        
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            50% { opacity: 0.6; box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+        }
+        
+        .live-text {
+            color: #ef4444;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
         
         .video-player {
@@ -165,352 +176,426 @@
             max-width: 800px;
             aspect-ratio: 16/9;
             background: #000;
-            border: 3px solid #333;
-            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+            border-radius: 16px;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
-            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
         
         .video-placeholder {
-            color: #666;
-            font-size: 0.8rem;
+            color: #444;
+            font-size: 0.9rem;
             text-align: center;
-            line-height: 1.5;
-        }
-        
-        .live-badge {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #ff0000;
-            padding: 5px 15px;
-            font-size: 0.7rem;
-            animation: blink 1s infinite;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
-        }
-        
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.6; }
+            line-height: 1.6;
+            padding: 20px;
         }
         
         /* Control section */
         .control-section {
-            background: linear-gradient(180deg, #1a1a2e 0%, #16161e 100%);
-            border-top: 2px solid #333;
-            box-shadow: 0 -10px 30px rgba(0, 255, 255, 0.2);
+            background: linear-gradient(to top, #0a0a0a, #111);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            padding-bottom: env(safe-area-inset-bottom, 20px);
         }
         
+        /* Tab bar */
         .tab-bar {
             display: flex;
-            background: #0a0a0a;
-            border-bottom: 2px solid #333;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .tab {
             flex: 1;
-            padding: 15px;
+            padding: 12px 20px;
             text-align: center;
             cursor: pointer;
-            background: #16161e;
+            background: transparent;
             border: none;
             color: #666;
-            font-family: 'Press Start 2P', cursive;
-            font-size: 0.8rem;
-            transition: all 0.3s;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 8px;
             position: relative;
         }
         
-        .tab:not(:last-child) {
-            border-right: 1px solid #333;
-        }
-        
         .tab.active {
-            background: #1a1a2e;
-            color: #00ffff;
-            text-shadow: 0 0 10px #00ffff;
-        }
-        
-        .tab.active::after {
-            content: "";
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: #00ffff;
-            box-shadow: 0 0 10px #00ffff;
+            background: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
         }
         
         .tab:hover:not(.active) {
-            background: #1a1a2e;
             color: #999;
         }
         
         .tab-content {
             display: none;
-            padding: 30px;
-            min-height: 250px;
+            animation: fadeIn 0.3s ease;
         }
         
         .tab-content.active {
             display: block;
         }
         
-        /* Action buttons */
-        .actions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 20px;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Actions content with integrated knob */
+        .actions-container {
             max-width: 600px;
             margin: 0 auto;
         }
         
-        .action-button {
-            aspect-ratio: 1;
-            background: linear-gradient(145deg, #2a2a3e, #16161e);
-            border: 2px solid #444;
-            border-radius: 15px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
+        .intensity-section {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
         
-        .action-button:hover {
-            transform: translateY(-5px) scale(1.05);
-            border-color: #00ffff;
-            box-shadow: 
-                0 10px 30px rgba(0, 255, 255, 0.4),
-                inset 0 0 20px rgba(0, 255, 255, 0.1);
+        .intensity-header {
+            text-align: center;
+            margin-bottom: 20px;
         }
         
-        .action-button.activated {
-            animation: activate 0.5s;
-        }
-        
-        @keyframes activate {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); box-shadow: 0 0 50px rgba(0, 255, 255, 0.8); }
-            100% { transform: scale(1); }
-        }
-        
-        .action-icon {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            filter: drop-shadow(0 0 10px currentColor);
-        }
-        
-        .action-label {
-            font-size: 0.6rem;
-            color: #999;
+        .intensity-label {
+            font-size: 0.85rem;
+            color: #666;
             text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
         }
         
-        /* Knob control */
+        .intensity-value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* Modern knob design */
         .knob-container {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            gap: 20px;
+            padding: 10px;
         }
         
         .knob-wrapper {
             position: relative;
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
         }
         
         .knob {
             width: 100%;
             height: 100%;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, #3a3a4e, #16161e);
-            border: 3px solid #444;
+            background: linear-gradient(145deg, #1a1a1a, #0f0f0f);
             cursor: grab;
             position: relative;
             box-shadow: 
-                0 0 30px rgba(0, 255, 255, 0.3),
-                inset 0 0 20px rgba(0, 0, 0, 0.5);
-            transition: border-color 0.3s;
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 2px 4px rgba(0, 0, 0, 0.5),
+                inset 0 -2px 4px rgba(255, 255, 255, 0.05);
+            transition: box-shadow 0.3s ease;
         }
         
         .knob:active {
             cursor: grabbing;
         }
         
-        .knob:hover {
-            border-color: #00ffff;
+        .knob-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            height: 80%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #2a2a2a, #0a0a0a);
+            box-shadow: 
+                inset 0 2px 8px rgba(0, 0, 0, 0.8),
+                inset 0 -2px 4px rgba(255, 255, 255, 0.05);
         }
         
         .knob-indicator {
             position: absolute;
-            top: 10px;
+            top: 12px;
             left: 50%;
             width: 4px;
-            height: 30px;
-            background: #00ffff;
+            height: 25px;
+            background: linear-gradient(180deg, #8b5cf6 0%, #6d28d9 100%);
             transform: translateX(-50%);
-            box-shadow: 0 0 10px #00ffff;
-            pointer-events: none;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.8);
         }
         
-        .knob-value {
-            font-size: 1.5rem;
-            color: #00ffff;
-            text-shadow: 0 0 20px #00ffff;
+        /* Action buttons grid */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+            gap: 12px;
         }
         
-        .knob-label {
-            font-size: 0.8rem;
-            color: #666;
-            margin-top: 10px;
+        .action-button {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .action-button:hover {
+            background: rgba(139, 92, 246, 0.05);
+            border-color: rgba(139, 92, 246, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .action-button.activated {
+            background: rgba(139, 92, 246, 0.1);
+            border-color: #8b5cf6;
+            animation: buttonPulse 0.4s ease;
+        }
+        
+        @keyframes buttonPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+        
+        .action-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            transition: transform 0.3s ease;
+        }
+        
+        .action-button:hover .action-icon {
+            transform: scale(1.1);
+        }
+        
+        .action-label {
+            font-size: 0.75rem;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
         }
         
         /* Tip content */
         .tip-content {
             text-align: center;
-            padding: 40px;
+            padding: 60px 20px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .tip-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
         }
         
         .tip-message {
             color: #666;
-            font-size: 0.8rem;
-            line-height: 1.8;
-            margin-bottom: 30px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
         }
         
         .coming-soon {
-            background: linear-gradient(90deg, #ff00ff, #00ffff);
+            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            font-size: 1rem;
-            animation: gradient 3s ease infinite;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
         
-        @keyframes gradient {
-            0%, 100% { filter: hue-rotate(0deg); }
-            50% { filter: hue-rotate(180deg); }
-        }
-        
-        /* Action feedback */
+        /* Action feedback toast */
         .action-feedback {
             position: fixed;
-            top: 50%;
+            top: 20px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            border: 2px solid #00ffff;
-            padding: 20px 40px;
-            font-size: 1.2rem;
-            color: #00ffff;
-            text-shadow: 0 0 20px #00ffff;
+            transform: translateX(-50%) translateY(-100px);
+            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            font-weight: 500;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1000;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
         }
         
         .action-feedback.show {
             opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 640px) {
+            .video-section {
+                padding: 15px;
+            }
+            
+            .control-section {
+                padding: 15px;
+                padding-bottom: calc(15px + env(safe-area-inset-bottom, 0px));
+            }
+            
+            .actions-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+            
+            .action-icon {
+                font-size: 1.8rem;
+            }
+            
+            .intensity-section {
+                padding: 15px;
+            }
+            
+            .knob-wrapper {
+                width: 100px;
+                height: 100px;
+            }
+        }
+        
+        @media (max-height: 700px) {
+            .video-section {
+                padding: 10px;
+            }
+            
+            .video-player {
+                max-width: 600px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Homepage -->
     <div class="homepage" id="homepage">
-        <h1 class="glitch-text">Secret<br>Stream<br>Club</h1>
-        <button class="enter-button" onclick="enterApp()">[ ENTER ]</button>
+        <div class="logo-container">
+            <h1 class="logo-title">Stream Control</h1>
+            <p class="logo-subtitle">Interactive Experience</p>
+        </div>
+        <button class="enter-button" onclick="enterApp()">Enter Stream</button>
     </div>
     
     <!-- Main App -->
     <div class="main-app" id="mainApp">
         <!-- Video Section -->
         <div class="video-section">
-            <div class="stream-title">⚡ LIVE TRANSMISSION ⚡</div>
+            <div class="stream-header">
+                <div class="live-indicator">
+                    <div class="live-dot"></div>
+                    <span class="live-text">Live</span>
+                </div>
+            </div>
             <div class="video-player">
                 <div class="video-placeholder">
-                    [ STREAM PLAYER ]<br>
-                    Video feed will appear here<br>
-                    Waiting for signal...
+                    Stream player loading...<br>
+                    Waiting for connection
                 </div>
-                <div class="live-badge">● LIVE</div>
             </div>
         </div>
         
         <!-- Control Section -->
         <div class="control-section">
             <div class="tab-bar">
-                <button class="tab" onclick="switchTab('tip')">💰 TIP</button>
-                <button class="tab active" onclick="switchTab('actions')">⚡ ACTIONS</button>
-                <button class="tab" onclick="switchTab('speed')">🎮 SPEED</button>
+                <button class="tab active" onclick="switchTab('actions')">Actions</button>
+                <button class="tab" onclick="switchTab('tip')">Support</button>
+            </div>
+            
+            <!-- Actions Tab Content -->
+            <div class="tab-content active" id="actionsTab">
+                <div class="actions-container">
+                    <!-- Intensity Control -->
+                    <div class="intensity-section">
+                        <div class="intensity-header">
+                            <div class="intensity-label">Intensity</div>
+                            <div class="intensity-value" id="knobValue">0%</div>
+                        </div>
+                        <div class="knob-container">
+                            <div class="knob-wrapper">
+                                <div class="knob" id="knob">
+                                    <div class="knob-inner"></div>
+                                    <div class="knob-indicator"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="actions-grid">
+                        <div class="action-button" onclick="triggerAction('Spray', this)">
+                            <span class="action-icon">💦</span>
+                            <span class="action-label">Spray</span>
+                        </div>
+                        <div class="action-button" onclick="triggerAction('Light', this)">
+                            <span class="action-icon">💡</span>
+                            <span class="action-label">Light</span>
+                        </div>
+                        <div class="action-button" onclick="triggerAction('Oil', this)">
+                            <span class="action-icon">🛢️</span>
+                            <span class="action-label">Oil</span>
+                        </div>
+                        <div class="action-button" onclick="triggerAction('Shock', this)">
+                            <span class="action-icon">⚡</span>
+                            <span class="action-label">Shock</span>
+                        </div>
+                        <div class="action-button" onclick="triggerAction('Vibrate', this)">
+                            <span class="action-icon">📳</span>
+                            <span class="action-label">Vibrate</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <!-- Tip Tab Content -->
             <div class="tab-content" id="tipTab">
                 <div class="tip-content">
+                    <div class="tip-icon">💜</div>
                     <div class="tip-message">
-                        Support the stream<br>
-                        Send your energy
+                        Support your favorite streamer with tips and donations
                     </div>
-                    <div class="coming-soon">[ COMING SOON ]</div>
-                </div>
-            </div>
-            
-            <!-- Actions Tab Content -->
-            <div class="tab-content active" id="actionsTab">
-                <div class="actions-grid">
-                    <div class="action-button" onclick="triggerAction('Spray', this)">
-                        <span class="action-icon">💦</span>
-                        <span class="action-label">Spray</span>
-                    </div>
-                    <div class="action-button" onclick="triggerAction('Oil', this)">
-                        <span class="action-icon">🛢️</span>
-                        <span class="action-label">Oil</span>
-                    </div>
-                    <div class="action-button" onclick="triggerAction('Light', this)">
-                        <span class="action-icon">💡</span>
-                        <span class="action-label">Light</span>
-                    </div>
-                    <div class="action-button" onclick="triggerAction('Fire', this)">
-                        <span class="action-icon">🔥</span>
-                        <span class="action-label">Fire</span>
-                    </div>
-                    <div class="action-button" onclick="triggerAction('Ice', this)">
-                        <span class="action-icon">🧊</span>
-                        <span class="action-label">Ice</span>
-                    </div>
-                    <div class="action-button" onclick="triggerAction('Zap', this)">
-                        <span class="action-icon">⚡</span>
-                        <span class="action-label">Zap</span>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Speed Tab Content -->
-            <div class="tab-content" id="speedTab">
-                <div class="knob-container">
-                    <div class="knob-wrapper">
-                        <div class="knob" id="knob">
-                            <div class="knob-indicator"></div>
-                        </div>
-                    </div>
-                    <div class="knob-value" id="knobValue">0%</div>
-                    <div class="knob-label">INTENSITY CONTROL</div>
+                    <div class="coming-soon">Coming Soon</div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- Action Feedback Overlay -->
+    <!-- Action Feedback Toast -->
     <div class="action-feedback" id="actionFeedback"></div>
     
     <script>
@@ -519,16 +604,16 @@
             const homepage = document.getElementById('homepage');
             const mainApp = document.getElementById('mainApp');
             
-            // Add glitch effect before transition
-            homepage.style.animation = 'glitch 0.1s 5';
+            homepage.classList.add('hidden');
             
             setTimeout(() => {
-                homepage.classList.add('hidden');
+                homepage.style.display = 'none';
+                mainApp.classList.add('active');
+                // Trigger opacity after display change
                 setTimeout(() => {
-                    homepage.style.display = 'none';
-                    mainApp.classList.add('active');
-                }, 500);
-            }, 500);
+                    mainApp.style.opacity = '1';
+                }, 10);
+            }, 600);
         }
         
         // Tab switching
@@ -543,66 +628,72 @@
             contents.forEach(content => content.classList.remove('active'));
             
             const tabMap = {
-                'tip': 'tipTab',
                 'actions': 'actionsTab',
-                'speed': 'speedTab'
+                'tip': 'tipTab'
             };
             
             document.getElementById(tabMap[tabName]).classList.add('active');
         }
         
-        // Trigger action
+        // Get current intensity value
+        function getCurrentIntensity() {
+            return knobPercentage;
+        }
+        
+        // Trigger action with intensity
         function triggerAction(actionName, button) {
+            const intensity = getCurrentIntensity();
+            
             // Visual feedback on button
             button.classList.add('activated');
-            setTimeout(() => button.classList.remove('activated'), 500);
+            setTimeout(() => button.classList.remove('activated'), 400);
             
-            // Show feedback overlay
+            // Show feedback toast with intensity
             const feedback = document.getElementById('actionFeedback');
-            feedback.textContent = `${actionName.toUpperCase()} ACTIVATED!`;
+            feedback.textContent = `${actionName} at ${intensity}% intensity`;
             feedback.classList.add('show');
             
             setTimeout(() => {
                 feedback.classList.remove('show');
-            }, 1500);
+            }, 2000);
             
-            // Console log for debugging
-            console.log(`Action triggered: ${actionName}`);
+            // Log action with intensity for backend integration
+            console.log(`Action: ${actionName}, Intensity: ${intensity}%`);
             
-            // Here you would send the action to your backend
-            // For now, it's just a visual effect
+            // Here you would send to your backend:
+            // sendActionToBackend({ action: actionName, intensity: intensity });
         }
         
         // Knob control
         let knobRotation = 0;
+        let knobPercentage = 0;
         let isDragging = false;
         let startAngle = 0;
-        let currentAngle = 0;
         
         const knob = document.getElementById('knob');
         const knobValue = document.getElementById('knobValue');
         
         function updateKnob(angle) {
-            // Limit rotation between 0 and 270 degrees
-            angle = Math.max(0, Math.min(270, angle));
+            // Limit rotation between -135 and 135 degrees (270 degree range)
+            angle = Math.max(-135, Math.min(135, angle));
             knobRotation = angle;
             
             // Update visual rotation
             knob.style.transform = `rotate(${angle}deg)`;
             
-            // Calculate percentage (0-270 degrees = 0-100%)
-            const percentage = Math.round((angle / 270) * 100);
-            knobValue.textContent = `${percentage}%`;
+            // Calculate percentage (0 to 100)
+            knobPercentage = Math.round(((angle + 135) / 270) * 100);
+            knobValue.textContent = `${knobPercentage}%`;
             
-            // Add glow effect based on value
-            const glowIntensity = percentage / 100;
+            // Update knob glow based on value
+            const glowIntensity = knobPercentage / 100;
+            const glowColor = `rgba(139, 92, 246, ${0.3 + glowIntensity * 0.4})`;
             knob.style.boxShadow = `
-                0 0 ${30 + glowIntensity * 20}px rgba(0, 255, 255, ${0.3 + glowIntensity * 0.5}),
-                inset 0 0 20px rgba(0, 0, 0, 0.5)
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 ${20 + glowIntensity * 30}px ${glowColor},
+                inset 0 2px 4px rgba(0, 0, 0, 0.5),
+                inset 0 -2px 4px rgba(255, 255, 255, 0.05)
             `;
-            
-            // Console log for debugging
-            console.log(`Speed set to: ${percentage}%`);
         }
         
         function getAngle(e) {
@@ -610,49 +701,43 @@
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
             
-            const x = e.clientX - centerX;
-            const y = e.clientY - centerY;
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+            
+            const x = clientX - centerX;
+            const y = clientY - centerY;
             
             let angle = Math.atan2(y, x) * (180 / Math.PI) + 90;
-            if (angle < 0) angle += 360;
-            
             return angle;
         }
         
+        // Mouse events
         knob.addEventListener('mousedown', (e) => {
             isDragging = true;
             startAngle = getAngle(e) - knobRotation;
-            knob.style.cursor = 'grabbing';
             e.preventDefault();
         });
         
         document.addEventListener('mousemove', (e) => {
             if (!isDragging) return;
-            
-            currentAngle = getAngle(e) - startAngle;
+            const currentAngle = getAngle(e) - startAngle;
             updateKnob(currentAngle);
         });
         
         document.addEventListener('mouseup', () => {
-            if (isDragging) {
-                isDragging = false;
-                knob.style.cursor = 'grab';
-            }
+            isDragging = false;
         });
         
-        // Touch support for mobile
+        // Touch events for mobile
         knob.addEventListener('touchstart', (e) => {
             isDragging = true;
-            const touch = e.touches[0];
-            startAngle = getAngle(touch) - knobRotation;
+            startAngle = getAngle(e.touches[0]) - knobRotation;
             e.preventDefault();
         });
         
         document.addEventListener('touchmove', (e) => {
             if (!isDragging) return;
-            
-            const touch = e.touches[0];
-            currentAngle = getAngle(touch) - startAngle;
+            const currentAngle = getAngle(e.touches[0]) - startAngle;
             updateKnob(currentAngle);
         });
         
@@ -660,20 +745,29 @@
             isDragging = false;
         });
         
-        // Add keyboard controls for accessibility
+        // Keyboard controls
         document.addEventListener('keydown', (e) => {
-            if (document.getElementById('speedTab').classList.contains('active')) {
+            if (document.getElementById('actionsTab').classList.contains('active')) {
                 if (e.key === 'ArrowUp' || e.key === 'ArrowRight') {
-                    updateKnob(Math.min(270, knobRotation + 10));
+                    updateKnob(Math.min(135, knobRotation + 10));
                 } else if (e.key === 'ArrowDown' || e.key === 'ArrowLeft') {
-                    updateKnob(Math.max(0, knobRotation - 10));
+                    updateKnob(Math.max(-135, knobRotation - 10));
                 }
             }
         });
         
+        // Initialize knob at 0
+        updateKnob(-135);
+        
+        // Prevent pull-to-refresh on mobile
+        document.addEventListener('touchmove', (e) => {
+            if (e.touches[0].clientY > 0) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+        
         // Initialize
-        console.log('Retro Stream Club initialized');
-        console.log('Ready for interactive streaming!');
+        console.log('Stream Control initialized');
     </script>
 </body>
 </html>
